@@ -74,7 +74,7 @@ var initMap = function() {
 				return;
 			}
 
-			toastr.success('You can also search for your favourite place in the searchbox in the top left corner.', null, {
+			toastr.success('You can also search for your favourite place in the searchbox in the bottom left corner.', null, {
 				timeOut: 5000,
 				closeButton: true
 			});
