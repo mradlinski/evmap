@@ -31,16 +31,18 @@ var initMap = function() {
 		})();
 	}
 
+	var searchContainer = document.getElementById('location-search-container');
 	var searchInput = document.getElementById('location-search-input');
 	var logoContainer = document.getElementById('logo');
 	var brandingContainer = document.getElementById('branding');
 	var attributionContainer = document.getElementById('attribution');
+	var geolocationButton = document.getElementById('location-button');
 
 	var map = new Map(document.getElementById('map'), center);
 
 	map.addControl(logoContainer, google.maps.ControlPosition.LEFT_TOP);
 	map.addControl(brandingContainer, google.maps.ControlPosition.LEFT_TOP);
-	map.addSearchBox(searchInput, function(newCenter) {
+	map.addSearchBox(searchInput, searchContainer, function(newCenter) {
 		map.moveView(newCenter);
 		map.resetZoom();
 		setUrlToPoint(newCenter);
@@ -79,29 +81,50 @@ var initMap = function() {
 		}, 5000);
 	})();
 
-	if (navigator.geolocation && !hasPresetCenter) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			var lat = position.coords.latitude;
-			var lng = position.coords.longitude;
+	if (navigator.geolocation) {
+		if (!hasPresetCenter) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				var lat = position.coords.latitude;
+				var lng = position.coords.longitude;
 
-			map.moveView({
-				lat: lat,
-				lng: lng
-			});
-			map.resetZoom();
-			setUrlToPoint({
-				lat: lat,
-				lng: lng
+				map.moveView({
+					lat: lat,
+					lng: lng
+				});
+				map.resetZoom();
+				setUrlToPoint({
+					lat: lat,
+					lng: lng
+				});
+
+				Places.getPlacesNearPoint(lat, lng, map, {
+					noNotifs: true
+				});
 			});
 
-			Places.getPlacesNearPoint(lat, lng, map, {
-				noNotifs: true
+			toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
+				timeOut: 10000,
+				closeButton: true
 			});
-		});
+		}
 
-		toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
-			timeOut: 10000,
-			closeButton: true
+		geolocationButton.addEventListener('click', function() {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				var lat = position.coords.latitude;
+				var lng = position.coords.longitude;
+
+				map.moveView({
+					lat: lat,
+					lng: lng
+				});
+				map.resetZoom();
+				setUrlToPoint({
+					lat: lat,
+					lng: lng
+				});
+
+				Places.getPlacesNearPoint(lat, lng, map);
+			});
 		});
 	} else {
 		toastr.success('Click on the map to show nearby Facebook events!', 'What is this?', {

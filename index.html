@@ -37,12 +37,27 @@
 			margin-top: 40px;
 		}
 
-		#location-search-input {
+		#location-search-container {
 			width: 300px;
 			max-width: 50%;
 			margin: 10px;
-			padding: 5px;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+			align-items: center;
+		}
+
+		#location-search-input {
+			width: 100%;
 			font-size: 1.5em;
+			padding: 5px;
+		}
+
+		#location-button {
+			height: 3em;
+			padding: 5px;
+			cursor: pointer;
 		}
 
 		#logo {
@@ -83,7 +98,10 @@
 </head>
 
 <body>
-	<input id="location-search-input" type="search" placeholder="Search..." />
+	<div id="location-search-container">
+		<input id="location-search-input" type="search" placeholder="Search..." />
+		<img id="location-button" src="geolocation.png" />
+	</div>
 	<div id="logo">
 		<img src="logo.png" />
 	</div>

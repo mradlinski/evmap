@@ -46,9 +46,9 @@ var Map = function(container, center) {
 				infoWindow: infoWindow
 			};
 		},
-		addSearchBox: function(searchBoxElement, onSearchResult) {
+		addSearchBox: function(searchBoxElement, searchBoxContainer, onSearchResult) {
 			var searchBox = new google.maps.places.SearchBox(searchBoxElement);
-			gMap.controls[google.maps.ControlPosition.LEFT_TOP].push(searchBoxElement);
+			gMap.controls[google.maps.ControlPosition.LEFT_TOP].push(searchBoxContainer);
 
 			searchBox.addListener('places_changed', function() {
 				var searchPlaces = searchBox.getPlaces();
