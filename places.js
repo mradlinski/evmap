@@ -3,6 +3,7 @@ var Places = (function() {
 	var places = [];
 
 	var loadingBlocked = false;
+	var loadingBlockedNotifs = [];
 	var timesLoaded = 0;
 	var fbLoginPrompted = false;
 
@@ -17,9 +18,18 @@ var Places = (function() {
 		}
 	};
 
-	var getPlacesNearPoint = function(lat, lng, map) {
-		if (loadingBlocked) {
-			return;
+	var isLoadingBlocked = function() {
+		return loadingBlocked;
+	};
+
+	var getPlacesNearPoint = function(lat, lng, map, opts) {
+		opts = opts || {};
+
+		if (isLoadingBlocked()) {
+			if (!opts.noNotifs) {
+				loadingBlockedNotifs.push(toastr.warning('Still loading, please be patient!', null));
+			}
+			return false;
 		}
 
 		var fbToken = FBLogin.getFBToken();
@@ -27,16 +37,19 @@ var Places = (function() {
 		if (!fbLoginPrompted && timesLoaded > FB_EV_MAP.EVENT_LOADS_BEFORE_LOGIN_PROMPT && !fbToken) {
 			FBLogin.promptFacebookLogin();
 			fbLoginPrompted = true;
-			return;
+			return false;
 		}
 
-		var loadingToast = toastr.info('Loading places and events...', null, {
-			timeOut: FB_EV_MAP.API_REQ_TIMEOUT
-		});
+		var loadingToast;
+		if (!opts.noNotifs) {
+			loadingToast = toastr.info('Loading places and events...', null, {
+				timeOut: FB_EV_MAP.API_REQ_TIMEOUT
+			});
+		}
 
 		loadingBlocked = true;
 
-		return $.get({
+		$.get({
 			url: FB_EV_MAP.API_URL + '/events',
 			data: {
 				lat: lat,
@@ -79,11 +92,21 @@ var Places = (function() {
 			}
 		}).always(function() {
 			loadingBlocked = false;
-			toastr.clear(loadingToast);
+			if (loadingToast) {
+				toastr.clear(loadingToast);
+			}
+
+			loadingBlockedNotifs.forEach(function(l) {
+				toastr.clear(l);
+			});
+			loadingBlockedNotifs = [];
 		});
+
+		return true;
 	};
 
 	return {
-		getPlacesNearPoint: getPlacesNearPoint
+		getPlacesNearPoint: getPlacesNearPoint,
+		isLoadingBlocked: isLoadingBlocked
 	};
 })();

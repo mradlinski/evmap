@@ -13,6 +13,7 @@ var setUrlToPoint = function(point) {
 
 var initMap = function() {
 	var center = FB_EV_MAP.DEFAULT_MAP_CENTER;
+	var hasPresetCenter = false;
 
 	if (window.location.search) {
 		(function() {
@@ -24,6 +25,8 @@ var initMap = function() {
 					lat: parseFloat(latMatch[1]),
 					lng: parseFloat(lngMatch[1])
 				};
+
+				hasPresetCenter = true;
 			}
 		})();
 	}
@@ -76,7 +79,7 @@ var initMap = function() {
 		}, 5000);
 	})();
 
-	if (navigator.geolocation) {
+	if (navigator.geolocation && !hasPresetCenter) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var lat = position.coords.latitude;
 			var lng = position.coords.longitude;
@@ -91,7 +94,9 @@ var initMap = function() {
 				lng: lng
 			});
 
-			Places.getPlacesNearPoint(lat, lng, map);
+			Places.getPlacesNearPoint(lat, lng, map, {
+				noNotifs: true
+			});
 		});
 
 		toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
@@ -102,6 +107,12 @@ var initMap = function() {
 		toastr.success('Click on the map to show nearby Facebook events!', 'What is this?', {
 			timeOut: 10000,
 			closeButton: true
+		});
+	}
+
+	if (hasPresetCenter) {
+		Places.getPlacesNearPoint(center.lat, center.lng, map, {
+			noNotifs: true
 		});
 	}
 };
