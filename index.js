@@ -11,6 +11,32 @@ var setUrlToPoint = function(point) {
 	window.history.replaceState(null, null, newUrl);
 };
 
+var getGeolocation = function(callback, opts) {
+	opts = opts || {};
+	opts.showError = opts.showError !== undefined ? opts.showError : true;
+	opts.disableHighAccuracy = opts.disableHighAccuracy !== undefined ? opts.disableHighAccuracy : false;
+	opts.retry = opts.retry !== undefined ? opts.retry : true;
+
+	navigator.geolocation.getCurrentPosition(callback, function(err) {
+		console.error(err.stack || err);
+		if (!opts.retry) {
+			if (opts.showError) {
+				toastr.error('Sorry, your location could not be retrieved!');
+			}
+		} else {
+			getGeolocation(callback, {
+				retry: false,
+				disableHighAccuracy: true,
+				showError: opts.showError
+			});
+		}
+	}, {
+		enableHighAccuracy: !opts.disableHighAccuracy,
+		timeout: 3000,
+		maximumAge: 600000
+	});
+};
+
 var initMap = function() {
 	var center = FB_EV_MAP.DEFAULT_MAP_CENTER;
 	var hasPresetCenter = false;
@@ -83,7 +109,7 @@ var initMap = function() {
 
 	if (navigator.geolocation) {
 		if (!hasPresetCenter) {
-			navigator.geolocation.getCurrentPosition(function(position) {
+			getGeolocation(function(position) {
 				var lat = position.coords.latitude;
 				var lng = position.coords.longitude;
 
@@ -100,6 +126,8 @@ var initMap = function() {
 				Places.getPlacesNearPoint(lat, lng, map, {
 					noNotifs: true
 				});
+			}, {
+				showError: false
 			});
 		}
 
@@ -109,7 +137,7 @@ var initMap = function() {
 		});
 
 		geolocationButton.addEventListener('click', function() {
-			navigator.geolocation.getCurrentPosition(function(position) {
+			getGeolocation(function(position) {
 				var lat = position.coords.latitude;
 				var lng = position.coords.longitude;
 
