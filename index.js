@@ -101,12 +101,12 @@ var initMap = function() {
 					noNotifs: true
 				});
 			});
-
-			toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
-				timeOut: 10000,
-				closeButton: true
-			});
 		}
+
+		toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
+			timeOut: 10000,
+			closeButton: true
+		});
 
 		geolocationButton.addEventListener('click', function() {
 			navigator.geolocation.getCurrentPosition(function(position) {
