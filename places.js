@@ -104,6 +104,8 @@ var Places = (function() {
 			loadingBlockedNotifs = [];
 		});
 
+		ga('send', 'event', 'Map', 'events_requested');
+
 		return true;
 	};
 

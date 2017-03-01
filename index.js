@@ -186,6 +186,7 @@ var initMap = function() {
 
 				Places.getPlacesNearPoint(lat, lng, map);
 			});
+			ga('send', 'event', 'GeolocationButton', 'click');
 		});
 	} else {
 		toastr.success('Click on the map to show nearby Facebook events!', 'What is this?', {
@@ -205,6 +206,7 @@ var initMap = function() {
 			'https://www.facebook.com/sharer.php?url=' + encodeURIComponent(window.location.href),
 			'Share on Facebook'
 		);
+		ga('send', 'event', 'TwitterShare', 'click');
 	};
 
 	twShareButton.onclick = function() {
@@ -212,5 +214,6 @@ var initMap = function() {
 			'https://twitter.com/home?status=' + encodeURIComponent(window.location.href),
 			'Share on Twitter'
 		);
+		ga('send', 'event', 'TwitterShare', 'click');
 	};
 };

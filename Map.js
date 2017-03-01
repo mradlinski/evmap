@@ -69,6 +69,8 @@ var Map = function(container, center) {
 					lat: newCenter.lat(),
 					lng: newCenter.lng()
 				});
+
+				ga('send', 'event', 'SearchBox', 'use');
 			});
 		},
 		addControl: function(el, position) {

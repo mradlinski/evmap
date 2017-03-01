@@ -53,6 +53,7 @@ var FBLogin = (function() {
 
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected' && response.authResponse) {
+				ga('send', 'event', 'FBLogin', 'logged_in');
 				toastr.success('Thank you for supporting us!');
 				facebookToken = {
 					token: response.authResponse.accessToken,
@@ -65,6 +66,7 @@ var FBLogin = (function() {
 	};
 
 	var promptFacebookLogin = function() {
+		ga('send', 'event', 'FBPrompt', 'displayed');
 		initializeFB();
 		fbLoginModal = $('[data-remodal-id=fb-login-modal]').remodal({
 			hashTracking: false,
