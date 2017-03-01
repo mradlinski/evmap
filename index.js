@@ -213,7 +213,7 @@ var initMap = function() {
 
 	twShareButton.onclick = function() {
 		openPopup(
-			'https://twitter.com/home?status=' + encodeURIComponent(window.location.href),
+			'https://twitter.com/intent/tweet?text=' + encodeURIComponent(window.location.href),
 			'Share on Twitter'
 		);
 		ga('send', 'event', 'TwitterShare', 'click');
