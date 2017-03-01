@@ -84,6 +84,8 @@ var Places = (function() {
 			timesLoaded += 1;
 		}).fail(function(err) {
 			console.error(err.stack || err);
+			Raven.captureException(err);
+
 			toastr.error('Sorry, an error occurred! Try again?');
 
 			if (fbToken) {

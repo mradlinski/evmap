@@ -11,6 +11,22 @@ var setUrlToPoint = function(point) {
 	window.history.replaceState(null, null, newUrl);
 };
 
+var openPopup = function(url, title) {
+	var height = 400;
+	var width = 600;
+	var top = (screen.height / 2) - (height / 2);
+	var left = (screen.width / 2) - (width / 2);
+
+	return window.open(
+		url,
+		title,
+		'top=' + top +
+		',left=' + left +
+		',toolbar=0,status=0,width=' + width +
+		',height=' + height
+	);
+};
+
 var getGeolocation = function(callback, opts) {
 	opts = opts || {};
 	opts.showError = opts.showError !== undefined ? opts.showError : true;
@@ -19,6 +35,7 @@ var getGeolocation = function(callback, opts) {
 
 	navigator.geolocation.getCurrentPosition(callback, function(err) {
 		console.error(err.stack || err);
+		Raven.captureException(err);
 		if (!opts.retry) {
 			if (opts.showError) {
 				toastr.error('Sorry, your location could not be retrieved!');
@@ -59,15 +76,20 @@ var initMap = function() {
 
 	var searchContainer = document.getElementById('location-search-container');
 	var searchInput = document.getElementById('location-search-input');
-	var logoContainer = document.getElementById('logo');
-	var brandingContainer = document.getElementById('branding');
-	var attributionContainer = document.getElementById('attribution');
 	var geolocationButton = document.getElementById('location-button');
+	var fbShareButton = document.getElementById('fb-share');
+	var twShareButton = document.getElementById('tw-share');
 
 	var map = new Map(document.getElementById('map'), center);
 
-	map.addControl(logoContainer, google.maps.ControlPosition.LEFT_TOP);
-	map.addControl(brandingContainer, google.maps.ControlPosition.LEFT_TOP);
+	map.addControl(
+		document.getElementById('logo'),
+		google.maps.ControlPosition.LEFT_TOP
+	);
+	map.addControl(
+		document.getElementById('branding'),
+		google.maps.ControlPosition.LEFT_TOP
+	);
 	map.addSearchBox(searchInput, searchContainer, function(newCenter) {
 		map.moveView(newCenter);
 		map.resetZoom();
@@ -75,7 +97,18 @@ var initMap = function() {
 
 		Places.getPlacesNearPoint(newCenter.lat, newCenter.lng, map);
 	});
-	map.addControl(attributionContainer, google.maps.ControlPosition.BOTTOM_LEFT);
+	map.addControl(
+		document.getElementById('attribution'),
+		google.maps.ControlPosition.BOTTOM_LEFT
+	);
+	map.addControl(
+		twShareButton,
+		google.maps.ControlPosition.RIGHT_BOTTOM
+	);
+	map.addControl(
+		fbShareButton,
+		google.maps.ControlPosition.RIGHT_BOTTOM
+	);
 
 	map.addClickListener(function(event) {
 		var lat = event.latLng.lat();
@@ -166,4 +199,18 @@ var initMap = function() {
 			noNotifs: true
 		});
 	}
+
+	fbShareButton.onclick = function() {
+		openPopup(
+			'https://www.facebook.com/sharer.php?url=' + encodeURIComponent(window.location.href),
+			'Share on Facebook'
+		);
+	};
+
+	twShareButton.onclick = function() {
+		openPopup(
+			'https://twitter.com/home?status=' + encodeURIComponent(window.location.href),
+			'Share on Twitter'
+		);
+	};
 };
