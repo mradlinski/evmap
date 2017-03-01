@@ -208,7 +208,7 @@ var initMap = function() {
 				'&redirect_uri=' + encodeURIComponent(window.location.href),
 			'Share on Facebook'
 		);
-		ga('send', 'event', 'TwitterShare', 'click');
+		ga('send', 'event', 'FacebookShare', 'click');
 	};
 
 	twShareButton.onclick = function() {
