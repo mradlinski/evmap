@@ -203,7 +203,9 @@ var initMap = function() {
 
 	fbShareButton.onclick = function() {
 		openPopup(
-			'https://www.facebook.com/sharer.php?url=' + encodeURIComponent(window.location.href),
+			'https://www.facebook.com/dialog/share?app_id=428176257526452' +
+				'&display=popup&href=' + encodeURIComponent(window.location.href) +
+				'&redirect_uri=' + encodeURIComponent(window.location.href),
 			'Share on Facebook'
 		);
 		ga('send', 'event', 'TwitterShare', 'click');
