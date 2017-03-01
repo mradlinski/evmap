@@ -195,11 +195,9 @@ var initMap = function() {
 		});
 	}
 
-	if (hasPresetCenter) {
-		Places.getPlacesNearPoint(center.lat, center.lng, map, {
-			noNotifs: true
-		});
-	}
+	Places.getPlacesNearPoint(center.lat, center.lng, map, {
+		noNotifs: true
+	});
 
 	fbShareButton.onclick = function() {
 		openPopup(
