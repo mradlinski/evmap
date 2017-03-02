@@ -88,7 +88,7 @@ var initMap = function() {
 	);
 	map.addControl(
 		document.getElementById('branding'),
-		google.maps.ControlPosition.LEFT_TOP
+		google.maps.ControlPosition.LEFT_BOTTOM
 	);
 	map.addSearchBox(searchInput, searchContainer, function(newCenter) {
 		map.moveView(newCenter);
