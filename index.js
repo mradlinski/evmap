@@ -128,7 +128,7 @@ var initMap = function() {
 			return;
 		}
 
-		toastr.success('Click the map to load more events!', null, {
+		toastr.success('Click on the map to load more events!', null, {
 			timeOut: 5000,
 			closeButton: true
 		});

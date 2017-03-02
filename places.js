@@ -83,8 +83,8 @@ var Places = (function() {
 
 			timesLoaded += 1;
 		}).fail(function(err) {
-			console.error(err.stack || err);
-			Raven.captureException(err);
+			console.error(err);
+			Raven.captureException(JSON.stringify(err));
 
 			toastr.error('Sorry, an error occurred! Try again?');
 
