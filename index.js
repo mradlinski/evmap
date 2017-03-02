@@ -110,7 +110,9 @@ var initMap = function() {
 		google.maps.ControlPosition.RIGHT_BOTTOM
 	);
 
+	var mapClicked = false;
 	map.addClickListener(function(event) {
+		mapClicked = true;
 		var lat = event.latLng.lat();
 		var lng = event.latLng.lng();
 		setUrlToPoint({
@@ -120,6 +122,17 @@ var initMap = function() {
 
 		Places.getPlacesNearPoint(lat, lng, map);
 	});
+
+	setTimeout(function() {
+		if (mapClicked) {
+			return;
+		}
+
+		toastr.success('Click the map to load more events!', null, {
+			timeOut: 5000,
+			closeButton: true
+		});
+	}, 10000);
 
 	(function() {
 		var searchNotifCancelled = false;
@@ -133,12 +146,14 @@ var initMap = function() {
 				return;
 			}
 
-			toastr.success('You can also search for your favourite place in the searchbox in the bottom left corner.', null, {
+			toastr.success('You can also search for your favourite place in the searchbox at the top!', null, {
 				timeOut: 5000,
 				closeButton: true
 			});
-		}, 5000);
+		}, 20000);
 	})();
+
+
 
 	if (navigator.geolocation) {
 		if (!hasPresetCenter) {
@@ -165,7 +180,7 @@ var initMap = function() {
 		}
 
 		toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
-			timeOut: 10000,
+			timeOut: 7000,
 			closeButton: true
 		});
 
@@ -190,7 +205,7 @@ var initMap = function() {
 		});
 	} else {
 		toastr.success('Click on the map to show nearby Facebook events!', 'What is this?', {
-			timeOut: 10000,
+			timeOut: 7000,
 			closeButton: true
 		});
 	}
