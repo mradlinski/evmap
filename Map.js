@@ -39,6 +39,7 @@ var Map = function(container, center) {
 
 				currentOpenInfoWindow = infoWindow;
 				infoWindow.open(gMap, marker);
+				ga('send', 'event', 'Place', 'click');
 			});
 
 			return {

@@ -112,7 +112,6 @@ var initMap = function() {
 
 	var mapClicked = false;
 	map.addClickListener(function(event) {
-		mapClicked = true;
 		var lat = event.latLng.lat();
 		var lng = event.latLng.lng();
 		setUrlToPoint({
@@ -121,17 +120,35 @@ var initMap = function() {
 		});
 
 		Places.getPlacesNearPoint(lat, lng, map);
+
+		if (!mapClicked) {
+			ga('send', 'event', 'Map', 'click');
+			mapClicked = true;
+		} else {
+			ga('send', 'event', 'Map', 'first_click');
+		}
 	});
+
+	setTimeout(function() {
+		toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
+			timeOut: 7000
+		});
+	}, 2000);
 
 	setTimeout(function() {
 		if (mapClicked) {
 			return;
 		}
 
-		toastr.success('Click on the map to load more events!', null, {
-			timeOut: 5000,
-			closeButton: true
-		});
+		toastr.success('Click on the map to load more events!');
+
+		setTimeout(function() {
+			if (mapClicked) {
+				return;
+			}
+
+			toastr.success('Click on the map to load more events!');
+		}, 20000);
 	}, 10000);
 
 	(function() {
@@ -146,10 +163,7 @@ var initMap = function() {
 				return;
 			}
 
-			toastr.success('You can also search for your favourite place in the searchbox at the top!', null, {
-				timeOut: 5000,
-				closeButton: true
-			});
+			toastr.success('You can also search for your favourite place in the searchbox at the top!');
 		}, 20000);
 	})();
 
@@ -179,10 +193,6 @@ var initMap = function() {
 			});
 		}
 
-		toastr.success('Allow this page to access your location or click on the map to show nearby Facebook events!', 'What is this?', {
-			timeOut: 7000,
-			closeButton: true
-		});
 
 		geolocationButton.addEventListener('click', function() {
 			getGeolocation(function(position) {
@@ -203,12 +213,8 @@ var initMap = function() {
 			});
 			ga('send', 'event', 'GeolocationButton', 'click');
 		});
-	} else {
-		toastr.success('Click on the map to show nearby Facebook events!', 'What is this?', {
-			timeOut: 7000,
-			closeButton: true
-		});
 	}
+
 
 	Places.getPlacesNearPoint(center.lat, center.lng, map, {
 		noNotifs: true

@@ -11,4 +11,7 @@ var FB_EV_MAP = {
 };
 
 toastr.options.progressBar = true;
+toastr.options.timeOut = 5000;
 toastr.options.extendedTimeOut = 3000;
+toastr.options.closeButton = true;
+toastr.options.showMethod = 'slideDown';

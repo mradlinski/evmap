@@ -27,7 +27,7 @@ var Places = (function() {
 
 		if (isLoadingBlocked()) {
 			if (!opts.noNotifs) {
-				loadingBlockedNotifs.push(toastr.warning('Still loading, please be patient!', null));
+				loadingBlockedNotifs.push(toastr.warning('Still loading, please be patient!'));
 			}
 			return false;
 		}
@@ -103,8 +103,6 @@ var Places = (function() {
 			});
 			loadingBlockedNotifs = [];
 		});
-
-		ga('send', 'event', 'Map', 'events_requested');
 
 		return true;
 	};
