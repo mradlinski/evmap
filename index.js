@@ -119,13 +119,13 @@ var initMap = function() {
 			lng: lng
 		});
 
-		Places.getPlacesNearPoint(lat, lng, map);
+		var startedLoading = Places.getPlacesNearPoint(lat, lng, map);
 
-		if (!mapClicked) {
-			ga('send', 'event', 'Map', 'click');
+		if (!mapClicked && startedLoading) {
+			ga('send', 'event', 'Map', 'first_click');
 			mapClicked = true;
 		} else {
-			ga('send', 'event', 'Map', 'first_click');
+			ga('send', 'event', 'Map', 'click');
 		}
 	});
 
