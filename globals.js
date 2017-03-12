@@ -1,5 +1,5 @@
 var FB_EV_MAP = {
-	API_URL: 'https://fb-event-map.ml',
+	API_URL: 'https://evmap.ml',
 	DEFAULT_MAP_CENTER: {
 		lat: 37.756230,
 		lng: -122.441540
