@@ -87,6 +87,14 @@ var initMap = function() {
 		google.maps.ControlPosition.LEFT_TOP
 	);
 	map.addControl(
+		document.getElementById('attribution'),
+		google.maps.ControlPosition.LEFT_BOTTOM
+	);
+	map.addControl(
+		document.getElementById('privacy-policy'),
+		google.maps.ControlPosition.LEFT_BOTTOM
+	);
+	map.addControl(
 		document.getElementById('branding'),
 		google.maps.ControlPosition.LEFT_BOTTOM
 	);
@@ -97,10 +105,6 @@ var initMap = function() {
 
 		Places.getPlacesNearPoint(newCenter.lat, newCenter.lng, map);
 	});
-	map.addControl(
-		document.getElementById('attribution'),
-		google.maps.ControlPosition.BOTTOM_LEFT
-	);
 	map.addControl(
 		twShareButton,
 		google.maps.ControlPosition.RIGHT_BOTTOM
